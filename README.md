@@ -1557,6 +1557,28 @@ REST is focused on exposing data.  It minimizes the coupling between client/serv
 * [Thrift](https://code.facebook.com/posts/1468950976659943/)
 * [Why REST for internal use and not RPC](http://arstechnica.com/civis/viewtopic.php?t=1190508)
 
+
+## Steffen's Additional Topics
+* Bloom Filters
+* Consistent Hashing
+* Quorum
+* Leader and Follower
+* Write-ahead Log
+* Segmented Log
+* Lease
+* Heartbeat
+* Gossip Protocol
+* Phi Accrual Failure Detection
+* Split Brain
+* Fencing
+* Checksum
+* Vector Clocks
+* CAP Theorem
+* PACELC Theorem
+* Hinted Handoff
+* Read Repair
+* Merkle Trees
+* 
 ## Security
 
 This section could use some updates.  Consider [contributing](#contributing)!
