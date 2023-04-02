@@ -1578,7 +1578,9 @@ REST is focused on exposing data.  It minimizes the coupling between client/serv
 * Merkle Trees
 
 ### Communication
+
 ### Coordination
+A distributed system should try to give its clients the illusion they interact with a single node. Although achieving a perfect illusion is not always possible or desirable, it's clear that some degree of coordination is needed to build a distributed application.
 
 * Time
   * Agreeing on time is not easy
@@ -1590,7 +1592,10 @@ REST is focused on exposing data.  It minimizes the coupling between client/serv
   * Raft leader election 
 * Transactions
 * Asynchronous Transactions
+
 ### Scalability
+The simplest and quickest way to increase the application's capacity to handle load is to scale up the machine hosting it. However, the application will eventually hit a hard physical limit that we can't overcome no matter how much money we are willing to throw at it. The alternative to scaling up is to scale out by distributing the application across multiple machines.
+
 * Replication of Data
 * Functional Decomposition
   * breaking down an application into separate services, each with its own well-defined responsibility
@@ -1611,17 +1616,33 @@ REST is focused on exposing data.  It minimizes the coupling between client/serv
 * Messaging
 
 ### Resiliency
+Every part has a probability of failing, the more moving parts there are, the higher the chance that any of them will fail. Eventually, anything that can go wrong will go wrong; power outages, hardware faults, software crashes, memory leaks — you name it.
+
+To guarantee just two nines of availability, an application can only be unavailable for up to 15 minutes a day. That's very little time to take any manual action when something goes wrong. And if we strive for three nines, we only have 43 minutes per month available. Clearly, the more nines we want, the faster our systems need to detect, react to, and repair faults as they occur.
+
 * Common Failure Causes
 * Redundancy
 * Fault Isolation
   * Shuffle Sharding
   * Cellular Architectures
 * Downstream Resiliency
+  * timeouts
+  * retries 
 * Upstream Resiliency
+ * load shedding
+ * rate-limiting 
 
 
 ### Maintainability
+* Testing distributed systems
+* CI/CD
+* Monitoring
+  * SLI, SLO, Health
+* Observability
+* Manageability
+  * Change a system without code modification
 
+ 
 ## Security
 
 This section could use some updates.  Consider [contributing](#contributing)!
