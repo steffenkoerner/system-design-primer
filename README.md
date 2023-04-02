@@ -1582,6 +1582,8 @@ REST is focused on exposing data.  It minimizes the coupling between client/serv
 ### Coordination
 A distributed system should try to give its clients the illusion they interact with a single node. Although achieving a perfect illusion is not always possible or desirable, it's clear that some degree of coordination is needed to build a distributed application.
 
+* System Models
+* Failure Detection
 * Time
   * Agreeing on time is not easy
   * Vector Clocks
@@ -1591,7 +1593,14 @@ A distributed system should try to give its clients the illusion they interact w
 * Leader and Follower (Leader Election)
   * Raft leader election 
 * Transactions
+  * ACID
+  * Isolation
+  * Atomicity
+  * NoSQL
 * Asynchronous Transactions
+  * Outbox Pattern
+  * Sagas
+  * Isolation
 
 ### Scalability
 The simplest and quickest way to increase the application's capacity to handle load is to scale up the machine hosting it. However, the application will eventually hit a hard physical limit that we can't overcome no matter how much money we are willing to throw at it. The alternative to scaling up is to scale out by distributing the application across multiple machines.
@@ -1627,10 +1636,13 @@ To guarantee just two nines of availability, an application can only be unavaila
   * Cellular Architectures
 * Downstream Resiliency
   * timeouts
-  * retries 
+  * retries
+  * circuit breaker
 * Upstream Resiliency
  * load shedding
- * rate-limiting 
+ * load leveling
+ * rate-limiting
+ * constant work
 
 
 ### Maintainability
