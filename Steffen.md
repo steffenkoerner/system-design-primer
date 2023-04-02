@@ -1,5 +1,10 @@
 ## Steffen's Additional Topics
 
+* Edge Computing
+The idea of edge computing is to do the computational work as close to the data source/user as possible. This enables processing at greater speed and volume, which leads to less latency. This is especiall important i real time systems.
+
+* Cloud Computing
+In general in cloud computing the data sources are connected to a centralized cloud, where the processing of the data happens.
 
 ### Communication
 
