@@ -1561,8 +1561,7 @@ REST is focused on exposing data.  It minimizes the coupling between client/serv
 ## Steffen's Additional Topics
 * Bloom Filters
 * Consistent Hashing
-* Quorum
-* Leader and Follower
+
 * Write-ahead Log
 * Segmented Log
 * Lease
@@ -1572,13 +1571,57 @@ REST is focused on exposing data.  It minimizes the coupling between client/serv
 * Split Brain
 * Fencing
 * Checksum
-* Vector Clocks
 * CAP Theorem
 * PACELC Theorem
 * Hinted Handoff
 * Read Repair
 * Merkle Trees
-* 
+
+### Communication
+### Coordination
+
+* Time
+  * Agreeing on time is not easy
+  * Vector Clocks
+  * Logical Clocks
+  * Vector Clocks
+* Quorum
+* Leader and Follower (Leader Election)
+  * Raft leader election 
+* Transactions
+* Asynchronous Transactions
+### Scalability
+* Replication of Data
+* Functional Decomposition
+  * breaking down an application into separate services, each with its own well-defined responsibility
+* Partitioning
+  * splitting data into partitions and distributing them among nodes
+  * Range Partitioning
+  * Hash Partitioning
+* Replication
+  *  replicating functionality or data across nodes, also known as horizontal scaling
+* Http Caching
+* CDN (Content Delivery Networks)
+* Network Load Balancing
+  * DNS Load Balancing
+  * Transport Layer Load Balancing
+  * Application Layer Load Balancing 
+* Microservices
+* Control planes and data planes
+* Messaging
+
+### Resiliency
+* Common Failure Causes
+* Redundancy
+* Fault Isolation
+  * Shuffle Sharding
+  * Cellular Architectures
+* Downstream Resiliency
+* Upstream Resiliency
+
+
+### Maintainability
+
 ## Security
 
 This section could use some updates.  Consider [contributing](#contributing)!
