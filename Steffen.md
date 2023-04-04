@@ -229,4 +229,11 @@ To guarantee just two nines of availability, an application can only be unavaila
 
 
 # Great Resources
+
+One of the best sites for learning about linux, computer science, kotlin,...
+[Baeldung](https://www.baeldung.com/linux/linux-scripting-series)
+
+Okaish
 [Free System Design Interview Course](https://www.enjoyalgorithms.com/system-design-courses/)
+
+
