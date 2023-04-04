@@ -129,7 +129,33 @@ In the end there exist multiple different databases.
 #### Caching
 Caching improves the performance of a system by storing frequently used data in a cache such that a future request can return this data, without any additional overhead.
 
+This leads to an improved latency () and a higher throughput
+
+
 The main challenge with caching is to keep the data in the cache consistent with the data in the database.
+
+There are multiple Cache Invalidation strategies
+
+Write Through
+The data is always written to the cache and then to the database. If it is successfully stored in both a success is returned to the client. Thus, the cache is always consistent with the database.
+If there is no correlation between reading the data from the cache shortly after it is written this is not the best strategy as otherwise the cache is polluted with data that is not needed. Thus, there is another approach.
+
+Write Around
+In this strategy the data is only written to the cache if the entry already exists. This is needed to have the data consistent. If the data is not in the cache, it is only written to the database. On a read request that has a cache miss the data is loaded into the cache.
+
+Write Back
+While the two strategies before gurantee consistency it leads to write latency. Thus, in this strategy the data is only written to the cache until the client get a successfull message. The database is updated asynchronously.These updates can be done periodically. 
+
+The problem with having the latest data only in the cache for some time could lead to data loss due to e.g. power outages. That's because the cache is in volatile memory.
+
+One solution could be to have multiple distributed caches to have the data replicated.
+
+Another Question is about how Cache Eviction Policy
+This policy deals with the fact how to add new data to the cache if it is already full. This means which data should be removed from the cache.
+
+Least Recently Used (LRU) : Removes the data that was least recently used
+Least Frquently Used (LFU) : Removes the data that was least frequently used
+First in First Out (FIFO) : Removes the oldest data in the cache
 
 
 
