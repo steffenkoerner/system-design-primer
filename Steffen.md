@@ -1,7 +1,5 @@
 ## Steffen's Additional Topics
 
-
-
 * Edge Computing
 The idea of edge computing is to do the computational work as close to the data source/user as possible. This enables processing at greater speed and volume, which leads to less latency. This is especiall important i real time systems.
 
@@ -14,17 +12,38 @@ In general in cloud computing the data sources are connected to a centralized cl
 A distributed system should try to give its clients the illusion they interact with a single node. Although achieving a perfect illusion is not always possible or desirable, it's clear that some degree of coordination is needed to build a distributed application.
 
 * System Models
-* Consensus
-  * Paxos for distributed consensus
 * Failure Detection
 * Time
   * Agreeing on time is not easy
   * Vector Clocks
+  A vector clock is a (server,version) pair that belongs to a data item.
   * Logical Clocks
-  * Vector Clocks
+  * [Version Vector](https://martinfowler.com/articles/patterns-of-distributed-systems/version-vector.html)
+  In distributed systems it is important to detect concurrent updates. This means e.g. in a key-value store if different sever update the same key on it's node. This should be detected as it leads to inconsistency. Thus, this behaviour should be able to be detected. For this, every node maintains a list of counters.
+  They can be used for detecting a conflict, but they are not able to resolve it on their own. One solution could be that the latest write wins. This approach is based on time and is quite straight forward. The problem is with synchronising the time between servers. There are some problems with this synchronisation e.g. with protocols like NTP, but still some databases like Voldemort take it into account.
+  * Network Time Protocol (NTP) is a protocol to synchronise the time between multiple servers
+  * Conflict Resolution
+    * To be able to detect conflicts and be able to detect them there needs multiple information
+    * Thus, a key value store needs to store besides the value also a version vector for conflict detection andd time for resolution
+  * Read Repair
+    * One of the most common approaches to fix inconsistency is during a read operation. If there are differences detected and a possible solution found, then the updated version is send out. 
+
 * Quorum
-* Leader and Follower (Leader Election)
-  * Raft leader election 
+* Leader and Follower (Leader Election) (Consensus)
+  * Raft leader election
+  * Paxos
+* Heartbeat
+Heartbeat is used to check if a server is available. This can be checkd with the gossip
+protocol. Each node has a membership list, which has the ids of the servers and the heartbeat counter. Each node updates it's heartbeat counter each fixed time interval. 
+Then the node sends the information to a random set of other servers. This is done by all nodes
+If a node receives a heartbeat, it updates it's information.
+If the heartbeat of a server is not updated in a predefined time interval, this server is considered as offline.
+
+* [Gossip Protocol](https://martinfowler.com/articles/patterns-of-distributed-systems/gossip-dissemination.html)
+state sharing in distributed systems
+Use random selection of nodes to pass on information to ensure it reaches all the nodes in the cluster without flooding the network
+It's needed as in any large sytem all-to-all multicasting is not a solution as there 
+would be n² messages.
 * Transactions
   * SQL
     * ACID
@@ -122,7 +141,7 @@ In the end there exist multiple different databases.
 
 
 
-######## NOT WORKED ON #######
+
 
 
 
@@ -158,6 +177,9 @@ Least Frquently Used (LFU) : Removes the data that was least frequently used
 First in First Out (FIFO) : Removes the oldest data in the cache
 
 
+######## NOT WORKED ON #######
+
+* Messaging
 
 * Http Caching
 * CDN (Content Delivery Networks)
@@ -167,7 +189,7 @@ First in First Out (FIFO) : Removes the oldest data in the cache
   * Application Layer Load Balancing 
 * Microservices
 * Control planes and data planes
-* Messaging
+
 
 ### Resiliency
 Every part has a probability of failing, the more moving parts there are, the higher the chance that any of them will fail. Eventually, anything that can go wrong will go wrong; power outages, hardware faults, software crashes, memory leaks — you name it.
@@ -208,15 +230,28 @@ To guarantee just two nines of availability, an application can only be unavaila
 * Manageability
   * Change a system without code modification
 
+* Memmap
+  A memmap is an in-memory balanced tree data structure
+* Sorted String Table (SSTable) Really good explanation in the Design Data Intensive Applications Book of Martin Kleppmann
+  SSTables is a persistent file format that is used by many databases like Apache Cassandra.
+  They take data that is stored in memory in memtables, order it and write it to disk for fast data access.
+  The SSTables are immutable. This means they are never modified as operatinos like insert or delete would require many I/O to rewrite the file.
+  For faster access to a SSTabe an index file that contains key/offset mapping can be introduced.
+
+  SStable Compaction
+  The data is flushed from memmap to the SSTable. Thus, the amount of SSTables is growing and the disk is getting full. If data needs to be searched the search starts in memap and then with the latest SSTable and so forth. If a key e.g. is not in the databse, then all SSTables need to be searched that takes very long. Also the same keys are in multiple SSTables if they are written multiple times. These keys can be put together. This is what SSTable Compaction does. It merges multiple SSTables together and just take the latest keys.
+
+* Log Structured Merge Trees (LSMT)
+  Storage engines that use merging and compacting of sorted files (SSTablles) are often called LSM storage engines.
+
+* B Trees
 
 * Bloom Filters
 * Consistent Hashing
-
 * Write-ahead Log
 * Segmented Log
 * Lease
-* Heartbeat
-* Gossip Protocol
+* Last-Write-Wins
 * Phi Accrual Failure Detection
 * Split Brain
 * Fencing
@@ -226,7 +261,26 @@ To guarantee just two nines of availability, an application can only be unavaila
 * Hinted Handoff
 * Read Repair
 * Merkle Trees
+A merkle tree also called hash tree is a secure and efficient way of validating large data structures. 
+Is a tree where each leaf is labelled with the hash of a data block. If a node is not a leafe it's labelled with the hash of it's children.
+It's e.g. used in NOSQL databases to check if replicas are in sync. This means inconsistency checks and minimizing the amount of data that need to be send to bring these two replicas into a synced state.
 
+* Service Disocvery
+You don't want to have hard coded ip adresses as services come an go. The service disovery helps us to know where each instance is located. It acts like a registry in which all the adresses of the instances are tracked.
+
+
+
+
+# Databases
+Short summary [here](https://www.baeldung.com/cs/distributed-systems-guide)
+## Cassandra
+Cassandra is an open-source, distributed key-value system that adopts a partitioned wide column storage model. It features full multi-master data replication providing high availability with low latency. It’s linearly scalable with no single point of failure.
+
+## MongoDB
+MongoDB is an open-source, general-purpose, document-based, distributed database that stores data as a collection of documents.
+
+## Redis
+Redis is an open-source data structure store that we can use as a database, cache, or even a message broker. It supports different kinds of data structures like strings, lists, maps, to name a few. It’s primarily an in-memory key-value store with optional durability.
 
 # Great Resources
 
@@ -235,5 +289,7 @@ One of the best sites for learning about linux, computer science, kotlin,...
 
 Okaish
 [Free System Design Interview Course](https://www.enjoyalgorithms.com/system-design-courses/)
+
+[Patterns of Distributed Systems] (https://martinfowler.com/articles/patterns-of-distributed-systems/)
 
 
