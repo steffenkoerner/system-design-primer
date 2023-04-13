@@ -21,7 +21,7 @@ A distributed system should try to give its clients the illusion they interact w
   * [Version Vector](https://martinfowler.com/articles/patterns-of-distributed-systems/version-vector.html)
   In distributed systems it is important to detect concurrent updates. This means e.g. in a key-value store if different sever update the same key on it's node. This should be detected as it leads to inconsistency. Thus, this behaviour should be able to be detected. For this, every node maintains a list of counters.
   They can be used for detecting a conflict, but they are not able to resolve it on their own. One solution could be that the latest write wins. This approach is based on time and is quite straight forward. The problem is with synchronising the time between servers. There are some problems with this synchronisation e.g. with protocols like NTP, but still some databases like Voldemort take it into account.
-  * Network Time Protocol (NTP) is a protocol to synchronise the time between multiple servers
+  * [Network Time Protocol (NTP)](https://en.wikipedia.org/wiki/Network_Time_Protocol) is a protocol to synchronise the time between multiple servers
   * Conflict Resolution
     * To be able to detect conflicts and be able to detect them there needs multiple information
     * Thus, a key value store needs to store besides the value also a version vector for conflict detection andd time for resolution
@@ -247,6 +247,14 @@ To guarantee just two nines of availability, an application can only be unavaila
 * B Trees
 
 * Bloom Filters
+ They are a probabilistic data structure that can detect if data is in e.g. a hashmap if not all keys can be stored in the cache.
+ It uses multiple hashfunctions to map a key onto an index in an array. It then sets this entry to existing. Each key is hashed by multiple
+ hashfunctions. 
+ A query to the bloom filter checks the indices of the where the key is hashed to. If all of them are set to exist the key is probable inside. It's no gurantee as other keys can map to these indices as well. But if it states it is not in the map, then it is guranteed to not be there.
+
+ THe NOSQL database [Cassandra is using bloomfilters](https://cassandra.apache.org/doc/latest/cassandra/operating/bloom_filters.html) per SStable to check if a key is in the SStable.
+
+
 * Consistent Hashing
 * Write-ahead Log
 * Segmented Log
