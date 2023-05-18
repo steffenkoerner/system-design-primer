@@ -301,3 +301,26 @@ Okaish
 [Patterns of Distributed Systems] (https://martinfowler.com/articles/patterns-of-distributed-systems/)
 
 
+# Requirements from different Job Advertisments
+
+## Backend
+- Python -> Django, Flask
+- Java
+- TypeScript, Node
+- Rust
+- Testingframework (NSubstitute)
+- RESTful APIs
+- GraphQL
+- Docker
+- Kubernetes
+- Cluster e.g. AWS, Azure, Google Cloud
+- CI/CD
+- Microservices
+
+## SRE
+- Monitoring
+- Automation
+- Troubleshooting skills
+- Disaster Recovery
+
+
