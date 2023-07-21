@@ -1,19 +1,25 @@
-## Steffen's Additional Topics
+# Steffen's Additional Topics
 
-* Edge Computing
+**Edge Computing**
+
 The idea of edge computing is to do the computational work as close to the data source/user as possible. This enables processing at greater speed and volume, which leads to less latency. This is especiall important i real time systems.
 
-* Cloud Computing
+**Cloud Computing**
+
 In general in cloud computing the data sources are connected to a centralized cloud, where the processing of the data happens.
 
-### Communication
 
-### Coordination
+## Communication
+
+## Coordination
 A distributed system should try to give its clients the illusion they interact with a single node. Although achieving a perfect illusion is not always possible or desirable, it's clear that some degree of coordination is needed to build a distributed application.
 
-* System Models
-* Failure Detection
-* Time
+**System Models**
+
+**Failure Detection**
+
+**Time**
+
   * Agreeing on time is not easy
   * Vector Clocks
   A vector clock is a (server,version) pair that belongs to a data item.
@@ -25,26 +31,38 @@ A distributed system should try to give its clients the illusion they interact w
   * Conflict Resolution
     * To be able to detect conflicts and be able to detect them there needs multiple information
     * Thus, a key value store needs to store besides the value also a version vector for conflict detection andd time for resolution
-  * Read Repair
-    * One of the most common approaches to fix inconsistency is during a read operation. If there are differences detected and a possible solution found, then the updated version is send out. 
 
-* Quorum
-* Leader and Follower (Leader Election) (Consensus)
+**Read Repair**
+
+One of the most common approaches to fix inconsistency is during a read operation. If there are differences detected and a possible solution found, then the updated version is send out. 
+
+**Quorum**
+
+A quorum is the minimum number of votes that a distributed action has to obtain in order to perform an operation in a distributed system. This is needed
+for consistency.
+
+**Leader and Follower (Leader Election) (Consensus)**
+
   * Raft leader election
   * Paxos
-* Heartbeat
-Heartbeat is used to check if a server is available. This can be checkd with the gossip
-protocol. Each node has a membership list, which has the ids of the servers and the heartbeat counter. Each node updates it's heartbeat counter each fixed time interval. 
-Then the node sends the information to a random set of other servers. This is done by all nodes
-If a node receives a heartbeat, it updates it's information.
-If the heartbeat of a server is not updated in a predefined time interval, this server is considered as offline.
 
-* [Gossip Protocol](https://martinfowler.com/articles/patterns-of-distributed-systems/gossip-dissemination.html)
-state sharing in distributed systems
-Use random selection of nodes to pass on information to ensure it reaches all the nodes in the cluster without flooding the network
-It's needed as in any large sytem all-to-all multicasting is not a solution as there 
-would be n² messages.
-* Transactions
+**Heartbeat** 
+    
+Heartbeat is used to check which servers are online. In a cluster of servers it nees to be known if some servers are not reachable anymore. Thus, servers
+send regularly a heartbeat, which is a I am alive signla, to each other. If a heartbeat is not received from a server for some time it is declared
+as offline. If each server sends to each other server a heartbeat there will be quite some traffic. Thus, it's often combined with the gossip protocol.
+
+**[Gossip Protocol](https://martinfowler.com/articles/patterns-of-distributed-systems/gossip-dissemination.html)**
+
+The gossip protocol is used for efficient state sharing in distributed systems. Instead that each server sends to each other server a message, which
+leads to a flood of messages.
+Instead it picks random selection of nodes to pass on information to ensure it reaches all the nodes in the cluster without flooding the network
+It's needed as in any large sytem all-to-all multicasting is not a solution as there would be n² messages.
+
+
+
+**Transactions**
+
   * SQL
     * ACID
     * Atomicity - A group of operations are treated as a singlue unit.
@@ -63,18 +81,21 @@ would be n² messages.
   * Sagas
   * Isolation
 
-### Scalability
+## Scalability
 The simplest and quickest way to increase the application's capacity to handle load is to scale up the machine hosting it. However, the application will eventually hit a hard physical limit that we can't overcome no matter how much money we are willing to throw at it. The alternative to scaling up is to scale out by distributing the application across multiple machines.
 
 
-#### Vertical Scaling
+**Vertical Scaling**
+
 In vertical scaling the performance of a single machine is increased. This can be done by adding more resources or more powerful processors. At some point the system can't be scaled further due to the limit of resources that can be added. It also gets quit expensiv to add more specialized powerfull resources. 
-#### Horizontal Scaling
+
+**Horizontal Scaling**
+
 In horizontal scaling the performance is increased by adding more servers. These servers work together to achieve the request. This increases the complexity as we now have a distributed system.
 
 
 
-#### Replication of Data
+## Replication of Data
 Replication means to keep several copies of the same data in different places.This can be done for backup, fault tolerance, and improved overall network accessibility
   * Prevents loss of data. If a node fails, the data is still available in another node. 
   * Increases availability if a node is down
@@ -110,21 +131,21 @@ In this mode one follower are set to synchronous, while the others are set to as
 
 This ensures that at least two nodes have the latest data.
 
-### Data Partitioning
+## Data Partitioning
 Data Partitioning is the process of splitting a database into smaller chunks. It is used in cases the data does not fit into one node ore to increase the performance of the system.
 
-#### Horizontal Partitioning or Sharding
+### Horizontal Partitioning or Sharding
 The idea is to split the table data horizontally based on a partition key. This makes it possible to store smaller tables in each node. Especially needed if the data is not fitting on one machine.
 
 The table is now small and distriubted above multiple machines and each one having the same schema.
 
 The partitioning can be done by range partition, hash partition, list partition, composite partitioning,...
 
-#### Vertical Partitioning
+### Vertical Partitioning
 The idea is to reduce the size of a table by splitting by columns. It's also called normalization.
 
 
-#### Functional Partitioning or Federation
+### Functional Partitioning or Federation
 Breaking down an application into separate services, each with its own well-defined responsibility.
 Each service stores it's data on a different partition. 
 In the end there exist multiple different databases.
@@ -133,19 +154,7 @@ In the end there exist multiple different databases.
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-#### Caching
+## Caching
 Caching improves the performance of a system by storing frequently used data in a cache such that a future request can return this data, without any additional overhead.
 
 This leads to an improved latency () and a higher throughput
@@ -155,14 +164,17 @@ The main challenge with caching is to keep the data in the cache consistent with
 
 There are multiple Cache Invalidation strategies
 
-Write Through
+**Write Through**
+
 The data is always written to the cache and then to the database. If it is successfully stored in both a success is returned to the client. Thus, the cache is always consistent with the database.
 If there is no correlation between reading the data from the cache shortly after it is written this is not the best strategy as otherwise the cache is polluted with data that is not needed. Thus, there is another approach.
 
-Write Around
+**Write Around**
+
 In this strategy the data is only written to the cache if the entry already exists. This is needed to have the data consistent. If the data is not in the cache, it is only written to the database. On a read request that has a cache miss the data is loaded into the cache.
 
-Write Back
+**Write Back**
+
 While the two strategies before gurantee consistency it leads to write latency. Thus, in this strategy the data is only written to the cache until the client get a successfull message. The database is updated asynchronously.These updates can be done periodically. 
 
 The problem with having the latest data only in the cache for some time could lead to data loss due to e.g. power outages. That's because the cache is in volatile memory.
@@ -172,9 +184,9 @@ One solution could be to have multiple distributed caches to have the data repli
 Another Question is about how Cache Eviction Policy
 This policy deals with the fact how to add new data to the cache if it is already full. This means which data should be removed from the cache.
 
-Least Recently Used (LRU) : Removes the data that was least recently used
-Least Frquently Used (LFU) : Removes the data that was least frequently used
-First in First Out (FIFO) : Removes the oldest data in the cache
+**Least Recently Used (LRU) :** Removes the data that was least recently used
+**Least Frquently Used (LFU) :** Removes the data that was least frequently used
+**First in First Out (FIFO) :** Removes the oldest data in the cache
 
 
 ######## NOT WORKED ON #######
@@ -268,12 +280,14 @@ To guarantee just two nines of availability, an application can only be unavaila
 * PACELC Theorem
 * Hinted Handoff
 * Read Repair
-* Merkle Trees
+
+**Merkle Trees**
+
 A merkle tree also called hash tree is a secure and efficient way of validating large data structures. 
 Is a tree where each leaf is labelled with the hash of a data block. If a node is not a leafe it's labelled with the hash of it's children.
 It's e.g. used in NOSQL databases to check if replicas are in sync. This means inconsistency checks and minimizing the amount of data that need to be send to bring these two replicas into a synced state.
 
-* Service Disocvery
+**Service **Disocvery**
 You don't want to have hard coded ip adresses as services come an go. The service disovery helps us to know where each instance is located. It acts like a registry in which all the adresses of the instances are tracked.
 
 
@@ -281,14 +295,23 @@ You don't want to have hard coded ip adresses as services come an go. The servic
 
 # Databases
 Short summary [here](https://www.baeldung.com/cs/distributed-systems-guide)
-## Cassandra
+## Dynamo
 Cassandra is an open-source, distributed key-value system that adopts a partitioned wide column storage model. It features full multi-master data replication providing high availability with low latency. It’s linearly scalable with no single point of failure.
+
+## Cassandra
+Wide Column NoSQL Database
 
 ## MongoDB
 MongoDB is an open-source, general-purpose, document-based, distributed database that stores data as a collection of documents.
 
+## Kafka
+Distributed Messaging System
+
 ## Redis
 Redis is an open-source data structure store that we can use as a database, cache, or even a message broker. It supports different kinds of data structures like strings, lists, maps, to name a few. It’s primarily an in-memory key-value store with optional durability.
+
+## GFS
+Distributed File System Storage
 
 # Great Resources
 
@@ -299,6 +322,25 @@ Okaish
 [Free System Design Interview Course](https://www.enjoyalgorithms.com/system-design-courses/)
 
 [Patterns of Distributed Systems] (https://martinfowler.com/articles/patterns-of-distributed-systems/)
+
+
+
+
+## Microservice Patterns
+- API Gateway Pattern
+- Strangler Fig
+- Backend for Frontends (BFF)
+- Service Discovery Pattern
+- Circuit Breaker
+- Bulkhead
+- Retry
+- Sidecar
+- Saga Pattern
+- Event Driven Architecture
+- Command Query Responsibilit Segregation
+- Configuration Externalization Pattern
+- 
+
 
 
 # Requirements from different Job Advertisments
